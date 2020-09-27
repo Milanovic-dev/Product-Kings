@@ -25,7 +25,7 @@ const CreateProduct = () => {
       },
       body: JSON.stringify({shop: data.shop.name, name}),
     }).then((response) => {
-      if(response.status === 200){
+      if(response.status === 201){
         setSubmitting(false);
         // Redirect to /product/[id]
       }
@@ -36,12 +36,12 @@ const CreateProduct = () => {
     <Page>
       <div style={{ marginTop: 150 }}>
         <Query query={GET_SHOP}>
-          {(result, loading, error) => {
+          {({data, loading, error}) => {
           if(loading) return <div>Loading</div>;
           if(error) return <div>{error.message}</div>;
           
           return (
-            <Form onSubmit={() => handleSubmit(result.data)}>
+            <Form onSubmit={() => handleSubmit(data)}>
               <FormLayout>
                 <TextField
                   error={error}

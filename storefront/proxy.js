@@ -1,20 +1,6 @@
-const dbConnect = require('../database/dbConnect');
-const Shop = require('../models/shop');
 const fs = require('fs');
 
-dbConnect();
-
 const proxyUrl = '/pk';
-
-const proxyRoute = async (ctx, next) => {
-  try {  
-    var data = fs.readFileSync('./storefront/pkcore.js', 'utf8');   
-  } catch(e) {
-    console.log('Error:', e.stack);
-  }
-  ctx.response.set('Content-Type', 'application/liquid');
-  ctx.body = LiquidEmptyTemplate(ctx.request.query.shop, data.toString());
-}
 
 const LiquidEmptyTemplate = (shop, script) => {
   return `
@@ -31,5 +17,16 @@ const LiquidEmptyTemplate = (shop, script) => {
   </script>
   `;
 }
+
+const proxyRoute = async (ctx) => {
+  try {  
+    const data = fs.readFileSync('./storefront/pkcore.js', 'utf8');   
+    ctx.response.set('Content-Type', 'application/liquid');
+    ctx.body = LiquidEmptyTemplate(ctx.request.query.shop, data.toString());
+  } catch(e) {
+    console.log('Error:', e.stack);
+  }
+}
+
 
 module.exports = { proxyRoute, proxyUrl }

@@ -4,13 +4,16 @@ const Product = require('../models/Product');
 dbConnect();
 
 const createProduct = (name, shop) => {
-  const product = new Product({name, shop});
+  const product = Product.create({name, shop});
 
-  product.save((err) => {
-    if(err) console.error("ERR:" + err);
-  })
-
-  return { success: true };
+  return { success: true, data: product };
 }
 
-module.exports = {createProduct};
+const getProducts = async (shop) => {
+  const products = await Product.find({shop}).exec();
+
+  return { success: true, data: products};
+};
+
+
+module.exports = {createProduct, getProducts};

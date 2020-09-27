@@ -8,6 +8,7 @@ const { ApiVersion } = require('@shopify/koa-shopify-graphql-proxy');
 const { verifyRequest } = require('@shopify/koa-shopify-auth');
 const session = require('koa-session');
 const cors = require('@koa/cors');
+
 dotenv.config();
 
 const port = parseInt(process.env.PORT, 10) || 3000;
@@ -16,8 +17,8 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const Router = require('koa-router');
-const { proxyRoute, proxyUrl } = require('./storefront/proxy');
 const { recieveWebhook, registerWebhook } = require('@shopify/koa-shopify-webhooks');
+const { proxyRoute, proxyUrl } = require('./storefront/proxy');
 
 const { SHOPIFY_API_SECRET_KEY, SHOPIFY_API_KEY, HOST } = process.env;
 

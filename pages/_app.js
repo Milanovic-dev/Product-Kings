@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable react/jsx-props-no-spreading */
 import App from 'next/app';
 import Head from 'next/head';
 import { AppProvider } from '@shopify/polaris'; 
@@ -6,9 +8,9 @@ import { ApolloProvider } from 'react-apollo';
 import '@shopify/polaris/dist/styles.css';
 import translations from '@shopify/polaris/locales/en.json';
 import Cookies from 'js-cookie';
-import ClientRouter from '../components/ClientRouter'
 import ApolloClient from 'apollo-boost';
-import '@shopify/polaris/dist/styles.css';
+import ClientRouter from '../components/ClientRouter'
+
 import '../css/Index.css';
 
 const client = new ApolloClient({
@@ -23,7 +25,7 @@ class MyApp extends App {
     const config = { apiKey: API_KEY, shopOrigin: Cookies.get("shopOrigin"), forceRedirect: true };
 
     return (
-      <React.Fragment>
+      <>
         <Head>
           <title>Product Kings</title>
           <meta charSet="utf-8" />
@@ -34,9 +36,9 @@ class MyApp extends App {
             <ApolloProvider client={client}>
               <Component {...pageProps} />
             </ApolloProvider>
-         </AppProvider>
-         </Provider>
-      </React.Fragment>
+          </AppProvider>
+        </Provider>
+      </>
     );
   }
 }

@@ -1,7 +1,4 @@
-const { useState } = require("react");
-
 import dynamic from 'next/dynamic';
-const Editor = dynamic(import('react-simple-code-editor'), {ssr: false});
 
 import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/themes/prism.css';
@@ -9,6 +6,22 @@ import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 
 import { Button } from '@shopify/polaris';
+
+const { useState } = require("react");
+
+const Editor = dynamic(import('react-simple-code-editor'), {ssr: false});
+
+const execute = (customJS) => {
+  if(customJS){
+    try{
+      // eslint-disable-next-line no-eval
+      eval(customJS)
+    }catch(e){
+      // eslint-disable-next-line no-console
+      console.error(`Custom JS code is causing errors. Heres the error: \n${  e}`);
+    }
+  }
+}
 
 const CustomJS = () => {
   const [code, setCode] = useState('// Write your custom logic here.');
@@ -18,11 +31,11 @@ const CustomJS = () => {
       Editor
       <Editor 
         value={code}
-        onValueChange={code => setCode(code)}
-        highlight={code => highlight(code, languages.js, 'javascript')}
+        onValueChange={newCode => setCode(newCode)}
+        highlight={codeToHighlight => highlight(codeToHighlight, languages.js, 'javascript')}
         padding={10}
         tabSize={4}
-        spellCheck={true}
+        spellCheck
         style={{
           fontFamily: '"Consolas", "Fira Mono", monospace',
           fontWeight: 'bold',
@@ -34,16 +47,6 @@ const CustomJS = () => {
       <Button primary onClick={() => execute(code)}>Execute</Button>
     </div>
   )
-}
-
-const execute = (customJS) => {
-  if(customJS){
-    try{
-      eval(customJS)
-    }catch(e){
-      console.error('Custom JS code is causing errors. Heres the error: \n' + e);
-    }
-  }
 }
 
 export default CustomJS;

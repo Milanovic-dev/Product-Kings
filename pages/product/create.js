@@ -15,7 +15,6 @@ query {
 const CreateProduct = () => {
   const [name, setName] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState('');
   
   const handleSubmit = (data) => {
     setSubmitting(true);
@@ -26,7 +25,7 @@ const CreateProduct = () => {
       },
       body: JSON.stringify({shop: data.shop.name, name}),
     }).then((response) => {
-      if(response.status == 200){
+      if(response.status === 200){
         setSubmitting(false);
         // Redirect to /product/[id]
       }
@@ -36,18 +35,18 @@ const CreateProduct = () => {
   return (
     <Page>
       <div style={{ marginTop: 150 }}>
-      <Query query={GET_SHOP}>
-        {(result, loading, error) => {
+        <Query query={GET_SHOP}>
+          {(result, loading, error) => {
           if(loading) return <div>Loading</div>;
           if(error) return <div>{error.message}</div>;
-          console.log(result.data);
+          
           return (
             <Form onSubmit={() => handleSubmit(result.data)}>
               <FormLayout>
                 <TextField
                   error={error}
                   value={name}
-                  onChange={name => setName(name)}
+                  onChange={newName => setName(newName)}
                   label="Enter a name for this product builder"
                   type="text"
                   helpText={<span>Pick any name you want. This is how product builder will be shown in the product list.</span>}
@@ -57,7 +56,7 @@ const CreateProduct = () => {
             </Form>
           );
         }}
-      </Query>
+        </Query>
       </div>
     </Page>
   );

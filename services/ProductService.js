@@ -15,5 +15,11 @@ const getProducts = async (shop) => {
   return { success: true, data: products};
 };
 
+const getProduct = async (shop, id) => {
+  const product = await Product.findOne({_id: id, shop}).exec();
 
-module.exports = {createProduct, getProducts};
+  return { success: true, data: product};
+}
+
+
+module.exports = {createProduct, getProducts, getProduct};

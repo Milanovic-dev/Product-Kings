@@ -1,4 +1,5 @@
-import { Page, Heading, Card, ResourceList, ResourceItem, TextStyle } from '@shopify/polaris';
+/* eslint-disable no-underscore-dangle */
+import { Page, Heading, Card, ResourceList, ResourceItem, TextStyle, Button } from '@shopify/polaris';
 import { useState, useEffect } from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
@@ -11,7 +12,19 @@ query {
 }`
 
 const ShopProducts = () => {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(null);
+
+  const fetchProducts = (shop) => {
+    fetch(`/api/products?shopOrigin=${shop.name}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(async (response) => {
+      const body = await response.json();
+      setItems(body);
+    })
+  }
 
   return (
     <Query query={GET_SHOP}>
@@ -19,19 +32,16 @@ const ShopProducts = () => {
         if(loading) return <div>Loading</div>;
         if(error) return <div>{error.message}</div>
 
-        fetch(`/api/products?shopOrigin=${data.shop.name}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then(async (response) => {
-          const body = await response.json();
-          setItems(body);
-        })
+        if(!items){
+          fetchProducts(data.shop);
+        }
 
         return (
           <Page fullWidth>          
-            <div style={{ marginTop: '45px', marginBottom: '10px', marginLeft:'3px' }}><Heading element="h1"><p style={{ fontSize: '20px' }}>Products</p></Heading></div>   
+            <div style={{ marginTop: '45px', marginBottom: '10px', marginLeft:'3px' }}>
+              <Heading element="h1"><p style={{ fontSize: '20px' }}>Products</p></Heading>
+              <Button primary>New</Button>
+            </div>   
             <ProductList items={items} />
           </Page>
         );
@@ -51,11 +61,12 @@ const ProductList = ({items}) => {
         items={items}
         renderItem={(item) => {   
           return (
-            <ResourceItem id={item.id} onClick={() => {}}>
+            <ResourceItem id={item._id} onClick={() => {console.log(item)}}>
               <h2>
                 <TextStyle variation="strong">{item.name}</TextStyle>
               </h2>
               <div>Created: 29.06.2020</div>
+              <img src="https://www.w3schools.com/images/lamp.jpg" alt="Lamp" width="32" height="32" />
             </ResourceItem>
           );
         }}

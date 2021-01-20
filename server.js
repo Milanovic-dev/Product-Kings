@@ -17,24 +17,24 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const Router = require('koa-router');
-const { recieveWebhook, registerWebhook } = require('@shopify/koa-shopify-webhooks');
-const { proxyRoute, proxyUrl } = require('./storefront/proxy');
+const { storeProxyRoute, storeProxyUrl } = require('./app/storefront/proxy');
 
-const { SHOPIFY_API_SECRET_KEY, SHOPIFY_API_KEY, HOST } = process.env;
+const { SHOPIFY_API_SECRET_KEY, SHOPIFY_API_KEY } = process.env;
 
 app.prepare().then(() => {
   const server = new Koa();
   const router = new Router();
+
   server.use(session({ secure: true, sameSite: 'none' }, server));
   server.keys = [SHOPIFY_API_SECRET_KEY];
   server.use(cors());
-  server.use(
+  /* server.use(
     createShopifyAuth({
       apiKey: SHOPIFY_API_KEY,
       secret: SHOPIFY_API_SECRET_KEY,
       scopes: ['read_products', 'write_products'],
       afterAuth(ctx) {
-        const { shop, accessToken } = ctx.session;
+        const { shop } = ctx.session;
         ctx.cookies.set('shopOrigin', shop, {
           httpOnly: false,
           secure: true,
@@ -43,15 +43,15 @@ app.prepare().then(() => {
         ctx.redirect('/');
       },
     }),
-  );
+  ); */
   server.use(graphQLProxy({version: ApiVersion.October19}));
-  router.get(proxyUrl, proxyRoute);
-  router.get('*', verifyRequest(), async(ctx) => {
+  router.get(storeProxyUrl, storeProxyRoute);
+  router.get('*',  async(ctx) => {
     await handle(ctx.req, ctx.res);
     ctx.respond = false;
     ctx.res.statusCode = 200;
   });
-  router.post('*', verifyRequest(), async(ctx) => {
+  router.post('*', async(ctx) => {
     await handle(ctx.req, ctx.res);
     ctx.respond = false;
     ctx.res.statusCode = 201;

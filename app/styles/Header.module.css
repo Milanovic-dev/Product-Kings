@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Piazzolla:wght@500&family=Sansita+Swashed:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+.header {
+  background-color: #141414;
+  color: #EEF0F2;
+  height:50px;
+  display: flex;
+  flex-direction: row;
+  padding: 0 3.4rem;
+  font-family: 'Rubik', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header-brand {
+  flex: 1;
+  font-family: 'Piazzolla', serif;
+  font-weight: bold;
+  color:  #EEC643;
+  font-size: 18px;
+  align-self: center;
+  cursor: pointer;
+}
+
+.header-nav {
+  flex: 2;
+  display: flex;
+  flex-direction: row;
+  align-content: space-between;
+  margin: 5px;
+  align-self: center;
+  justify-content: flex-end;
+}
+
+.header-link {
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 8px;
+  flex: 0.1;
+  margin-right: 5px;
+  margin-left: 5px;
+  text-align: center;
+  transition:0.2s;
+}
+
+.header-link:hover {
+  color: #EEC643;
+  background-color:#000000 ;
+}

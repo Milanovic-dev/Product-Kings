@@ -2,6 +2,7 @@ import { Page, Form, FormLayout, TextField, Button } from '@shopify/polaris';
 import { useState } from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
+import { useRouter } from 'next/router';
 
 const GET_SHOP = gql`
 query {
@@ -13,6 +14,7 @@ query {
 }`
 
 const CreateProduct = () => {
+  const router = useRouter();
   const [name, setName] = useState('');
   const [submitting, setSubmitting] = useState(false);
   
@@ -24,10 +26,11 @@ const CreateProduct = () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({shop: data.shop.name, name}),
-    }).then((response) => {
+    }).then(async (response) => {
       if(response.status === 201){
         setSubmitting(false);
-        // Redirect to /product/[id]
+        const { _id } = await response.json();     
+        router.push(`/product/${_id}`);
       }
     });
   }

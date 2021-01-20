@@ -23,7 +23,7 @@ const execute = (customJS) => {
   }
 }
 
-const CustomJS = () => {
+const CustomLogic = () => {
   const [code, setCode] = useState('// Write your custom logic here.');
  
   return (
@@ -49,4 +49,4 @@ const CustomJS = () => {
   )
 }
 
-export default CustomJS;
+export default CustomLogic;

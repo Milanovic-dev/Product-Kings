@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const proxyUrl = '/pk';
+const storeProxyUrl = '/pk';
 
 const LiquidEmptyTemplate = (shop, script) => {
   return `
@@ -18,7 +18,7 @@ const LiquidEmptyTemplate = (shop, script) => {
   `;
 }
 
-const proxyRoute = async (ctx) => {
+const storeProxyRoute = async (ctx) => {
   try {  
     const data = fs.readFileSync('./storefront/pkcore.js', 'utf8');   
     ctx.response.set('Content-Type', 'application/liquid');
@@ -29,4 +29,4 @@ const proxyRoute = async (ctx) => {
 }
 
 
-module.exports = { proxyRoute, proxyUrl }
+module.exports = { storeProxyRoute, storeProxyUrl }
